@@ -35,7 +35,11 @@ public class DirectoryScanner
 	{
 		if (Directory.Exists(rootPath))
 		{
-			var file = new FileInfo(rootPath);
+			var dir = new DirectoryInfo(rootPath);
+			_root = new TreeNode(dir.Name, rootPath, true);
+			_root.Percentage = 100;
+			_taskQueue = new TaskQueue(maxThreads);
+			_taskQueue.EnqueueTask();
 		}
 		else
 			throw new Exception("This directory does not exist");

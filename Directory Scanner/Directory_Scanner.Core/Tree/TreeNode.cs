@@ -5,7 +5,7 @@ namespace Directory_Scanner.Model.Tree;
 public class TreeNode
 {
     public string Name { get; set; }
-    public string AbsolutePath { get; set; }
+    public string Path { get; set; }
     public long Size { get; set; }
     public double Percentage { get; set; }
 
@@ -21,12 +21,33 @@ public class TreeNode
         }
     }
     public ConcurrentBag<TreeNode>? Children { get; set; } = null;
-    public TreeNode(string name, string path)
+    public TreeNode(string name, string path, bool isDirectory)
     {
         Name = name;
-        AbsolutePath = path;
+        Path = path;
+        IsDirectory = isDirectory;
         Size = 0;
-        Percentage = 0;
+        Percentage = 0.0;
     }
 
+    public void CalculatePercentage()
+    {
+        if (IsDirectory && Children is not null)
+        {
+            foreach (TreeNode child in Children)
+            {
+                child.Percentage = (double)child.Size/ Size * 100;
+                child.CalculatePercentage();
+            }
+        }
+    }
+
+    public long CalculateSize()
+    {
+        if (IsDirectory && Children is not null) 
+        { 
+            Size = Children.Select(child => child.CalculateSize()).Sum();
+        }
+        return Size;
+    }
 }
