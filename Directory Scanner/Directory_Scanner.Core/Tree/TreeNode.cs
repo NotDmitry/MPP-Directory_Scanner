@@ -1,4 +1,6 @@
-﻿namespace Directory_Scanner.Model.Tree;
+﻿using System.Collections.Concurrent;
+
+namespace Directory_Scanner.Model.Tree;
 
 public class TreeNode
 {
@@ -15,10 +17,10 @@ public class TreeNode
         {
             _isDirectory = value;
             if (_isDirectory)
-                Children = new List<TreeNode>();
+                Children = new ConcurrentBag<TreeNode>();
         }
     }
-    public List<TreeNode>? Children { get; set; } = null;
+    public ConcurrentBag<TreeNode>? Children { get; set; } = null;
     public TreeNode(string name, string path)
     {
         Name = name;
