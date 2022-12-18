@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Directory_Scanner.Core", "Directory_Scanner.Core\Directory_Scanner.Core.csproj", "{4C5A196A-F7E9-40ED-B861-8335656162B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Directory_Scanner.Model", "Directory_Scanner.Core\Directory_Scanner.Model.csproj", "{4C5A196A-F7E9-40ED-B861-8335656162B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Directory_Scanner.VVM", "Directory_Scanner.VVM\Directory_Scanner.VVM.csproj", "{5A824FE5-66ED-4210-A107-B463F66EC109}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Directory_Scanner.Tests", "Directory_Scanner.Tests\Directory_Scanner.Tests.csproj", "{FD0AE1E8-FEBF-4905-876B-FE250CA9483D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{4C5A196A-F7E9-40ED-B861-8335656162B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C5A196A-F7E9-40ED-B861-8335656162B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C5A196A-F7E9-40ED-B861-8335656162B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A824FE5-66ED-4210-A107-B463F66EC109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A824FE5-66ED-4210-A107-B463F66EC109}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A824FE5-66ED-4210-A107-B463F66EC109}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A824FE5-66ED-4210-A107-B463F66EC109}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD0AE1E8-FEBF-4905-876B-FE250CA9483D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD0AE1E8-FEBF-4905-876B-FE250CA9483D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD0AE1E8-FEBF-4905-876B-FE250CA9483D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD0AE1E8-FEBF-4905-876B-FE250CA9483D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

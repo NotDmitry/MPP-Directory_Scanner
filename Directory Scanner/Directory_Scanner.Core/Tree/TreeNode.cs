@@ -7,14 +7,14 @@ public class TreeNode
     public long Size { get; set; }
     public double Percentage { get; set; }
 
-    private bool isDirectory;
+    private bool _isDirectory;
     public bool IsDirectory
     {
-        get => isDirectory;
+        get => _isDirectory;
         private set
         {
-            isDirectory = value;
-            if (isDirectory)
+            _isDirectory = value;
+            if (_isDirectory)
                 Children = new List<TreeNode>();
         }
     }
