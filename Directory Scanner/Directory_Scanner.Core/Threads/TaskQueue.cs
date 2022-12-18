@@ -4,13 +4,13 @@ public class TaskQueue
 {
     private List<Thread> _threads;
     private Queue<Action?> _tasks;
-    private int _waitingCount;
-    public CancellationTokenSource cts;
+    public int WaitingCount { get; private set; }
+    public CancellationTokenSource Cts { get; private set };
 
     public TaskQueue(int threadCount)
     {
-        cts = new CancellationTokenSource();
-        _waitingCount = 0;
+        Cts = new CancellationTokenSource();
+        WaitingCount = 0;
         _tasks = new Queue<Action?>();
         _threads = new List<Thread>();
         for (int i = 0; i < threadCount; i++)
@@ -34,11 +34,11 @@ public class TaskQueue
     {
         lock (_tasks)
         {
-            while (_tasks.Count == 0 && !cts.Token.IsCancellationRequested)
+            while (_tasks.Count == 0 && !Cts.Token.IsCancellationRequested)
             {
-                _waitingCount++;
+                WaitingCount++;
                 Monitor.Wait(_tasks);
-                _waitingCount--;
+                WaitingCount--;
             }
             return _tasks.Dequeue();
         }
@@ -46,7 +46,7 @@ public class TaskQueue
 
     private void DoThreadWork()
     {
-        while (!cts.Token.IsCancellationRequested)
+        while (!Cts.Token.IsCancellationRequested)
         {
             Action? task = DequeueTask();
             if (task != null)
@@ -67,13 +67,12 @@ public class TaskQueue
 
     public void Close()
     {
-        cts.Cancel();
-        for (int i = 0; i < _waitingCount; i++)
+        Cts.Cancel();
+        for (int i = 0; i < WaitingCount; i++)
             EnqueueTask(null);
         foreach (Thread t in _threads)
             t.Join();
-        cts.Dispose();
+        Cts.Dispose();
     }
-
 
 }
