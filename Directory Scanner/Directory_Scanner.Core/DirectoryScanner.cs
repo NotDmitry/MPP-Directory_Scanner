@@ -12,6 +12,7 @@ public class DirectoryScanner
 {
 	private int maxThreads;
 	private readonly int _defaultThreads = 6;
+	
     public int MaxThreads 
 	{
 		get => maxThreads;
@@ -22,6 +23,8 @@ public class DirectoryScanner
 	}
 
 	public int condition = 0;
+	public int maxFiles = 1;
+	public int currentFiles = 0;
 
 	private TaskQueue? _taskQueue;
 	private TreeNode? _root;
@@ -42,6 +45,7 @@ public class DirectoryScanner
             {
                 Percentage = 100
             };
+			maxFiles = GetTotalCount(dir);
             _taskQueue = new TaskQueue(maxThreads);
 			_taskQueue.EnqueueTask(() => ScanFullDirectory(_root));
 		}
@@ -71,6 +75,7 @@ public class DirectoryScanner
                             Size = file.Length
                         };
                         parent.Children?.Add(insertionNode);
+						Interlocked.Increment(ref currentFiles);
 					}
 				}
 
@@ -105,6 +110,25 @@ public class DirectoryScanner
 	public void SuspendWorkers()
 	{
 		Interlocked.Increment(ref condition);
+	}
+
+	public int GetTotalCount(DirectoryInfo root)
+	{
+		int totalCount = 0;
+		try
+		{
+			totalCount = root.GetFiles().Length;
+			var directories = root.GetDirectories();
+			foreach (var directory in directories)
+			{
+				totalCount += GetTotalCount(directory);
+			}
+		}
+		catch (Exception ex)
+		{
+            return totalCount;
+        }
+		return totalCount;
 	}
 
 }
