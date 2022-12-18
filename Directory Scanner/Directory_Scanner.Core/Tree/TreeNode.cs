@@ -1,4 +1,4 @@
-﻿namespace Directory_Scanner.Model;
+﻿namespace Directory_Scanner.Model.Tree;
 
 public class TreeNode
 {
@@ -8,7 +8,7 @@ public class TreeNode
     public double Percentage { get; set; }
 
     private bool isDirectory;
-    public bool IsDirectory 
+    public bool IsDirectory
     {
         get => isDirectory;
         private set
@@ -21,7 +21,7 @@ public class TreeNode
     public List<TreeNode>? Children { get; set; } = null;
     public TreeNode(string name, string path)
     {
-        Name= name;
+        Name = name;
         AbsolutePath = path;
         Size = 0;
         Percentage = 0;
