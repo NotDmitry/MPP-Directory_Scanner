@@ -5,7 +5,7 @@ public class TaskQueue
     private List<Thread> _threads;
     private Queue<Action?> _tasks;
     public int WaitingCount { get; private set; }
-    public CancellationTokenSource Cts { get; private set };
+    public CancellationTokenSource Cts { get; private set; }
 
     public TaskQueue(int threadCount)
     {
