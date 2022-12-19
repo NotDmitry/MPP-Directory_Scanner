@@ -17,6 +17,16 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
     private DirectoryScanner _directoryScanner;
 
+    private double _taskProgress = 0;
+    public double TaskProgress
+    {
+        get => _taskProgress;
+        set
+        {
+            _taskProgress = value;
+            OnPropertyChanged("TaskProgress");
+        }
+    }
 
     private int _maxThreads = 16;
     public int MaxThreads
@@ -51,7 +61,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
-    private VMFileSystemTree _treeVM;
+    private VMFileSystemTree _treeVM = 0.0;
     public VMFileSystemTree TreeVM
     {
         get => _treeVM;
@@ -99,6 +109,14 @@ public class ApplicationViewModel : INotifyPropertyChanged
                     TreeVM = new VMFileSystemTree(rootVM);
                     IsWorking = false;
                 });
+                Task.Run(() =>
+                {
+                    while (IsWorking)
+                    {
+                        TaskProgress = (double)_directoryScanner.currentFiles / _directoryScanner.maxFiles * 100;
+                    }
+                });
+
             });
 
         }
@@ -124,9 +142,6 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
 
     }
-
-
-
 
     public event PropertyChangedEventHandler? PropertyChanged;
     public void OnPropertyChanged([CallerMemberName] string prop = "")

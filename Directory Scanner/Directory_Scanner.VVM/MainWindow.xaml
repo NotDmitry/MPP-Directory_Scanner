@@ -21,11 +21,15 @@
             <Grid Grid.Row="1" ShowGridLines="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.35*"></ColumnDefinition>
                     <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <ProgressBar x:Name="ScannerPrBr" Grid.Column="1"></ProgressBar>
-                <Label x:Name="DirectoryLb" Grid.Column="0" Background="#FFFCFCFC" Content="{Binding RootPath}"></Label>
-                
+                <ProgressBar Maximum="100" Minimum="0" Value="20" x:Name="ScannerPrBr" Grid.Column="2" />
+                <Label x:Name="DirectoryLb" Grid.Column="0" Background="#FFD2F3E7" Content="{Binding RootPath}"></Label>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock Text="{Binding TaskProgress}" VerticalAlignment="Center" Margin="50, 0, 0, 0"></TextBlock>
+                    <TextBlock Text="%" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
             </Grid>
             <TreeView ItemsSource="{Binding TreeVM.Children}" x:Name="DirectoryTreeTrView" Grid.Row="0" Background="#FFFFCCCC" BorderBrush="White">
                 <TreeView.ItemTemplate>
