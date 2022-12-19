@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Directory_Scanner.VVM;
+namespace Directory_Scanner.VVM.ViewModel;
 
 public class RelayCommand : ICommand
 {

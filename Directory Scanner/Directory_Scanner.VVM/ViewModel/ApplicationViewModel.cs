@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Directory_Scanner.Model;
 using System.Windows.Forms;
 
-namespace Directory_Scanner.VVM;
+namespace Directory_Scanner.VVM.ViewModel;
 
 public class ApplicationViewModel : INotifyPropertyChanged
 {
@@ -20,8 +20,8 @@ public class ApplicationViewModel : INotifyPropertyChanged
     public int MaxThreads
     {
         get => _maxThreads;
-        set 
-        { 
+        set
+        {
             _maxThreads = value;
             OnPropertyChanged("MaxThreads");
         }
@@ -51,8 +51,8 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
 
     private RelayCommand _openDirectory;
-    public RelayCommand OpenDirectory 
-    { 
+    public RelayCommand OpenDirectory
+    {
         get
         {
             return _openDirectory ??= new RelayCommand(obj =>
@@ -64,8 +64,8 @@ public class ApplicationViewModel : INotifyPropertyChanged
                 });
 
         }
-           
-            
+
+
     }
 
     private RelayCommand _startScanning;
