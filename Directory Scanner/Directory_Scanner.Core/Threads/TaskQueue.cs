@@ -68,7 +68,7 @@ public class TaskQueue
     public void Close()
     {
         Cts.Cancel();
-        for (int i = 0; i < WaitingCount; i++)
+        for (int i = 0; i < _threads.Count; i++)
             EnqueueTask(null);
         foreach (Thread t in _threads)
             t.Join();

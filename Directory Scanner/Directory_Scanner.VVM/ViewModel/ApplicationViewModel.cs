@@ -9,15 +9,23 @@ using Directory_Scanner.Model;
 using System.Windows.Forms;
 using Directory_Scanner.VVM.Model;
 using Directory_Scanner.Model.Tree;
+using System.Drawing;
+using System.Threading;
 
 namespace Directory_Scanner.VVM.ViewModel;
 
 public class ApplicationViewModel : INotifyPropertyChanged
 {
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public void OnPropertyChanged([CallerMemberName] string prop = "")
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+    }
 
     private DirectoryScanner _directoryScanner;
+    public ApplicationViewModel() { }
 
-    private double _taskProgress = 0;
+    private double _taskProgress = 0.0;
     public double TaskProgress
     {
         get => _taskProgress;
@@ -50,7 +58,18 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
-    private bool _isWorking;
+    private string? _status = "Directory: ";
+    public string? Status
+    {
+        get => _status;
+        set
+        {
+            _status = value;
+            OnPropertyChanged("Status");
+        }
+    }
+
+    private bool _isWorking = false;
     public bool IsWorking
     {
         get => _isWorking;
@@ -61,7 +80,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
-    private VMFileSystemTree _treeVM = 0.0;
+    private VMFileSystemTree _treeVM;
     public VMFileSystemTree TreeVM
     {
         get => _treeVM;
@@ -85,10 +104,10 @@ public class ApplicationViewModel : INotifyPropertyChanged
                     DialogResult result = openDialog.ShowDialog();
                     if (result == DialogResult.OK)
                         RootPath = openDialog.SelectedPath;
+                    Status = "Directory: " + RootPath;
                 });
 
         }
-
 
     }
 
@@ -101,20 +120,23 @@ public class ApplicationViewModel : INotifyPropertyChanged
             {
                 Task.Run(() =>
                 {
+                    Status = "Scanning... " + RootPath;
                     IsWorking = true;
                     _directoryScanner = new DirectoryScanner(MaxThreads);
+                    Task.Run(() =>
+                    {
+                        while (IsWorking)
+                        {
+                            TaskProgress = Math.Round((double)_directoryScanner.currentFiles / _directoryScanner.maxFiles * 100);
+                        }
+                        TaskProgress = 100;
+                        Status = "Complete: " + RootPath;
+                    });
                     FileSystemTree result = _directoryScanner.StartScanning(RootPath);
                     var rootVM = new VMTreeNode(result.Root);
                     rootVM = VMTreeNode.ConvertChildren(rootVM, result.Root);
                     TreeVM = new VMFileSystemTree(rootVM);
                     IsWorking = false;
-                });
-                Task.Run(() =>
-                {
-                    while (IsWorking)
-                    {
-                        TaskProgress = (double)_directoryScanner.currentFiles / _directoryScanner.maxFiles * 100;
-                    }
                 });
 
             });
@@ -124,7 +146,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
     }
 
-    public RelayCommand _cancelScanning;
+    private RelayCommand _cancelScanning;
     public RelayCommand CancelScanning
     {
         get
@@ -143,9 +165,4 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    public void OnPropertyChanged([CallerMemberName] string prop = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-    }
 }

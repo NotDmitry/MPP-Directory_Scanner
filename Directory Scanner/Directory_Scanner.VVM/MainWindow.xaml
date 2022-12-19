@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Directory_Scanner.VVM"
-        xmlns:loca="clr-namespace:Directory_Scanner.VVM.ViewModel" d:DataContext="{d:DesignInstance Type=loca:ApplicationViewModel}"
+        xmlns:vm="clr-namespace:Directory_Scanner.VVM.ViewModel" d:DataContext="{d:DesignInstance Type=vm:ApplicationViewModel}"
         mc:Ignorable="d"
         Title="Directory Scanner" Height="450" Width="800">
 
@@ -24,17 +24,26 @@
                     <ColumnDefinition Width="0.35*"></ColumnDefinition>
                     <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <ProgressBar Maximum="100" Minimum="0" Value="20" x:Name="ScannerPrBr" Grid.Column="2" />
-                <Label x:Name="DirectoryLb" Grid.Column="0" Background="#FFD2F3E7" Content="{Binding RootPath}"></Label>
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Text="{Binding TaskProgress}" VerticalAlignment="Center" Margin="50, 0, 0, 0"></TextBlock>
+                <ProgressBar Maximum="100" Minimum="0" Value="{Binding TaskProgress}" x:Name="ScannerPrBr" Grid.Column="2" />
+                <Label x:Name="DirectoryLb" Grid.Column="0" Background="#FFD2F3E7" Content="{Binding Status}"
+                       FontSize="12" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Label>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="LeftToRight" 
+                            HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding TaskProgress}" VerticalAlignment="Center" ></TextBlock>
                     <TextBlock Text="%" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
             </Grid>
-            <TreeView ItemsSource="{Binding TreeVM.Children}" x:Name="DirectoryTreeTrView" Grid.Row="0" Background="#FFFFCCCC" BorderBrush="White">
+            <TreeView ItemsSource="{Binding TreeVM.Children}" x:Name="DirectoryTreeTrView" Grid.Row="0" Background="#FF070404" BorderBrush="White">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                         <StackPanel Orientation="Horizontal">
+                            <StackPanel.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="FontSize" Value="16"/>
+                                    <Setter Property="Background" Value="Yellow"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </StackPanel.Resources>
                             <Image Width="40" Height="40" Source="{Binding Path=Icon}"/>
                             <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
                             <TextBlock Text=" (" />

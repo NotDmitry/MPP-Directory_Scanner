@@ -10,8 +10,8 @@ namespace Directory_Scanner.VVM.ViewModel;
 
 public class RelayCommand : ICommand
 {
-    readonly Action<object> _execute;
-    readonly Predicate<object> _canExecute;
+    private Action<object> _execute;
+    private Predicate<object> _canExecute;
     public RelayCommand(Action<object> execute) : this(execute, null) { }
     public RelayCommand(Action<object> execute, Predicate<object> canExecute)
     {
@@ -30,5 +30,8 @@ public class RelayCommand : ICommand
         add { CommandManager.RequerySuggested += value; }
         remove { CommandManager.RequerySuggested -= value; }
     }
-    public void Execute(object parameter) { _execute(parameter); }
+    public void Execute(object parameter) 
+    { 
+        _execute(parameter); 
+    }
 }

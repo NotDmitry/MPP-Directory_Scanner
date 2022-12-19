@@ -36,7 +36,8 @@ public class TreeNode
         {
             foreach (TreeNode child in Children)
             {
-                child.Percentage = (double)child.Size/ Size * 100;
+                if (Size > 0)
+                    child.Percentage = (double)child.Size/ Size * 100;
                 child.CalculatePercentage();
             }
         }

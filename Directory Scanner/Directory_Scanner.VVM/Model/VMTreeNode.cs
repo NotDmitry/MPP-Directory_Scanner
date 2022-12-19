@@ -20,7 +20,7 @@ public class VMTreeNode
         Name = node.Name;
         Icon = node.IsDirectory ? VMFileSystemTree.icoFolderPath : VMFileSystemTree.icoFilePath;
         Size = node.Size;
-        Percentage = node.Percentage;
+        Percentage = Math.Truncate(node.Percentage * 100) / 100;
     }
 
     public static VMTreeNode ConvertChildren(VMTreeNode nodeVM, TreeNode node)
