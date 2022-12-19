@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Directory_Scanner.Model;
 using System.Windows.Forms;
+using Directory_Scanner.VVM.Model;
+using Directory_Scanner.Model.Tree;
 
 namespace Directory_Scanner.VVM.ViewModel;
 
@@ -39,13 +41,25 @@ public class ApplicationViewModel : INotifyPropertyChanged
     }
 
     private bool _isWorking;
-    public bool IsWorkings
+    public bool IsWorking
     {
         get => _isWorking;
         set
         {
             _isWorking = value;
             OnPropertyChanged("IsWorking");
+        }
+    }
+
+    private VMFileSystemTree _treeVM;
+    public VMFileSystemTree TreeVM
+    {
+        get => _treeVM;
+
+        private set
+        {
+            _treeVM = value;
+            OnPropertyChanged("TreeVM");
         }
     }
 
@@ -73,12 +87,18 @@ public class ApplicationViewModel : INotifyPropertyChanged
     {
         get
         {
-            return _openDirectory ??= new RelayCommand(obj =>
+            return _startScanning ??= new RelayCommand(obj =>
             {
-                var openDialog = new FolderBrowserDialog();
-                DialogResult result = openDialog.ShowDialog();
-                if (result == DialogResult.OK)
-                    RootPath = openDialog.SelectedPath;
+                Task.Run(() =>
+                {
+                    IsWorking = true;
+                    _directoryScanner = new DirectoryScanner(MaxThreads);
+                    FileSystemTree result = _directoryScanner.StartScanning(RootPath);
+                    var rootVM = new VMTreeNode(result.Root);
+                    rootVM = VMTreeNode.ConvertChildren(rootVM, result.Root);
+                    TreeVM = new VMFileSystemTree(rootVM);
+                    IsWorking = false;
+                });
             });
 
         }
@@ -86,16 +106,18 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
     }
 
+    public RelayCommand _cancelScanning;
     public RelayCommand CancelScanning
     {
         get
         {
-            return _openDirectory ??= new RelayCommand(obj =>
+            return _cancelScanning ??= new RelayCommand(obj =>
             {
-                var openDialog = new FolderBrowserDialog();
-                DialogResult result = openDialog.ShowDialog();
-                if (result == DialogResult.OK)
-                    RootPath = openDialog.SelectedPath;
+                if (IsWorking) 
+                {
+                    _directoryScanner.SuspendWorkers();
+                    IsWorking = false;
+                }
             });
 
         }

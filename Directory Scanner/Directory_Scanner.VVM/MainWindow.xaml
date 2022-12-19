@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Directory_Scanner.VVM"
+        xmlns:loca="clr-namespace:Directory_Scanner.VVM.ViewModel" d:DataContext="{d:DesignInstance Type=loca:ApplicationViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Directory Scanner" Height="450" Width="800">
 
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
@@ -22,21 +23,35 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <ProgressBar Grid.Column="1"></ProgressBar>
-                <Label Grid.Column="0"></Label>
+                <ProgressBar x:Name="ScannerPrBr" Grid.Column="1"></ProgressBar>
+                <Label x:Name="DirectoryLb" Grid.Column="0" Background="#FFFCFCFC" Content="{Binding RootPath}"></Label>
                 
             </Grid>
-            <TreeView Grid.Row="0" Background="Black"></TreeView>
+            <TreeView ItemsSource="{Binding TreeVM.Children}" x:Name="DirectoryTreeTrView" Grid.Row="0" Background="#FFFFCCCC" BorderBrush="White">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="40" Height="40" Source="{Binding Path=Icon}"/>
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                            <TextBlock Text=" (" />
+                            <TextBlock Text="{Binding Size}" />
+                            <TextBlock Text=" байт, " />
+                            <TextBlock Text="{Binding Percentage}" />
+                            <TextBlock Text="%)" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
         </Grid>
-        <StackPanel Grid.Column="0" Orientation="Vertical" Background="AliceBlue">
+        <StackPanel x:Name="ControlButtonStack" Grid.Column="0" Orientation="Vertical" Background="#FF5DC89A">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Margin" Value="10, 85, 10, 0"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Browse"/>
-            <Button Content="Start"/>
-            <Button Content="Cancel"/>
+            <Button x:Name="BrowseBtn" Content="Browse" FontFamily="Lucida Console" FontSize="16" Command="{Binding OpenDirectory}"/>
+            <Button x:Name="StartBtn" Content="Start" FontFamily="Lucida Console" FontSize="16" Command="{Binding StartScanning}"/>
+            <Button x:Name="CancelBtn" Content="Cancel" FontFamily="Lucida Console" FontSize="16" Command="{Binding CancelScanning}"/>
         </StackPanel>
     </Grid>   
     

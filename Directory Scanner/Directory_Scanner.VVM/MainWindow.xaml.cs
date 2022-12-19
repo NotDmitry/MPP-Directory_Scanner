@@ -24,10 +24,5 @@ namespace Directory_Scanner.VVM
         {
             InitializeComponent();
         }
-
-        private void btnOpenFileDialog_Copy_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

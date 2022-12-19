@@ -23,7 +23,7 @@ public class VMTreeNode
         Percentage = node.Percentage;
     }
 
-    public VMTreeNode ConvertChildren(VMTreeNode nodeVM, TreeNode node)
+    public static VMTreeNode ConvertChildren(VMTreeNode nodeVM, TreeNode node)
     {
         if (node.Children is not null)
         {
