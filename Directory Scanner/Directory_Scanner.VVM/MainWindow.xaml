@@ -6,7 +6,38 @@
         xmlns:local="clr-namespace:Directory_Scanner.VVM"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
 
-    </Grid>
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1" ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="0.15*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1" ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ProgressBar Grid.Column="1"></ProgressBar>
+                <Label Grid.Column="0"></Label>
+                
+            </Grid>
+            <TreeView Grid.Row="0" Background="Black"></TreeView>
+        </Grid>
+        <StackPanel Grid.Column="0" Orientation="Vertical" Background="AliceBlue">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="10, 85, 10, 0"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Browse"/>
+            <Button Content="Start"/>
+            <Button Content="Cancel"/>
+        </StackPanel>
+    </Grid>   
+    
 </Window>

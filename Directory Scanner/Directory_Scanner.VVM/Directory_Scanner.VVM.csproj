@@ -7,4 +7,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Directory_Scanner.Core\Directory_Scanner.Model.csproj" />
+  </ItemGroup>
+
 </Project>
