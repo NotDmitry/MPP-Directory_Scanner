@@ -2,11 +2,14 @@
 
 namespace Directory_Scanner.Model.Tree;
 
+// File tree element represents file or directory
 public class TreeNode
 {
     public string Name { get; set; }
     public string Path { get; set; }
     public long Size { get; set; }
+    
+    // Relative size according to parent directory
     public double Percentage { get; set; }
 
     private bool _isDirectory;
@@ -30,6 +33,7 @@ public class TreeNode
         Percentage = 0.0;
     }
 
+    // Calculate relative size for all elements (including nested)
     public void CalculatePercentage()
     {
         if (IsDirectory && Children is not null)
@@ -43,6 +47,7 @@ public class TreeNode
         }
     }
 
+    // Calculate size in bytes for all elements (including nested)
     public long CalculateSize()
     {
         if (IsDirectory && Children is not null) 

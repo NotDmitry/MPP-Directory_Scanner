@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using Directory_Scanner.Model;
 using System.Windows.Forms;
 using Directory_Scanner.VVM.Model;
 using Directory_Scanner.Model.Tree;
-using System.Drawing;
-using System.Threading;
 
 namespace Directory_Scanner.VVM.ViewModel;
 
+// Data and commands for binding to UI
 public class ApplicationViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -25,6 +21,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
     private DirectoryScanner _directoryScanner;
     public ApplicationViewModel() { }
 
+    // Progress bar data
     private double _taskProgress = 0.0;
     public double TaskProgress
     {
@@ -36,6 +33,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
+    // Maximal amount of working threads for scanning
     private int _maxThreads = 16;
     public int MaxThreads
     {
@@ -47,6 +45,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
+    // Root directory for scanning
     private string? _rootPath = "";
     public string? RootPath
     {
@@ -58,6 +57,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
+    // Additional data for changing progress status
     private string? _status = "Directory: ";
     public string? Status
     {
@@ -69,6 +69,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
+    // Check if scanning in progress
     private bool _isWorking = false;
     public bool IsWorking
     {
@@ -80,6 +81,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
+    // Result tree
     private VMFileSystemTree _treeVM;
     public VMFileSystemTree TreeVM
     {
@@ -92,7 +94,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
         }
     }
 
-
+    // Open folder dialog to choose directory
     private RelayCommand _openDirectory;
     public RelayCommand OpenDirectory
     {
@@ -111,6 +113,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
     }
 
+    // Beging scanning in selected directory
     private RelayCommand _startScanning;
     public RelayCommand StartScanning
     {
@@ -146,6 +149,7 @@ public class ApplicationViewModel : INotifyPropertyChanged
 
     }
 
+    // Cancel scanning if in progress
     private RelayCommand _cancelScanning;
     public RelayCommand CancelScanning
     {

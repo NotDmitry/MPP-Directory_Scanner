@@ -1,13 +1,9 @@
 ﻿using Directory_Scanner.Model.Threads;
 using Directory_Scanner.Model.Tree;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Directory_Scanner.Model;
 
+// Scan directory and return file system tree with calculated data as result
 public class DirectoryScanner
 {
 	private int maxThreads;
@@ -22,9 +18,15 @@ public class DirectoryScanner
 		}
 	}
 
+	// Condition to cancel scannig process
 	public int condition = 0;
+
+	// Files to be scanned
 	public int maxFiles = 1;
+
+	// Already scanned files
 	public int currentFiles = 0;
+
 	private object locker = new();
 
 	private TaskQueue? _taskQueue;
@@ -37,6 +39,7 @@ public class DirectoryScanner
 		MaxThreads = maxThreads;
 	}
 
+	// Begin scanning directory
 	public FileSystemTree StartScanning(string rootPath)
 	{
 		if (Directory.Exists(rootPath))
@@ -60,6 +63,7 @@ public class DirectoryScanner
 		return new FileSystemTree(_root);
 	}
 
+	// Work submitted to queue for worker threads
 	public void ScanFullDirectory(TreeNode parent)
 	{
 		var dir = new DirectoryInfo(parent.Path);
@@ -67,6 +71,7 @@ public class DirectoryScanner
 		{
 			try
 			{
+				// Scan files
 				FileInfo[] files = dir.GetFiles();
 				foreach (FileInfo file in files) 
 				{ 
@@ -82,6 +87,7 @@ public class DirectoryScanner
                     
                 }
 
+				// Scan directories and submit new work
                 DirectoryInfo[] directories = dir.GetDirectories();
                 foreach (DirectoryInfo directory in directories)
                 {
@@ -102,6 +108,7 @@ public class DirectoryScanner
 			throw new Exception("This directory does not exist");
 	}
 
+	// Wait for worker threads to stop or cancellation request
     public void WaitForActiveWorkers()
     {
         while (_taskQueue.WaitingCount != maxThreads && condition == 0)
@@ -110,11 +117,13 @@ public class DirectoryScanner
 		_taskQueue.Close();
     }
 
+	// Change condition to cancel scanning
 	public void SuspendWorkers()
 	{
 		Interlocked.Increment(ref condition);
 	}
 
+	// Preliminary file amount evaluation
 	public int GetTotalCount(DirectoryInfo root)
 	{
 		int totalCount = 0;

@@ -1,5 +1,6 @@
 ﻿namespace Directory_Scanner.Model.Threads;
 
+// Custom thread pooling system
 public class TaskQueue
 {
     private List<Thread> _threads;
@@ -22,6 +23,7 @@ public class TaskQueue
         }
     }
 
+    // Add new work item to the queue
     public void EnqueueTask(Action? task)
     {
         lock (_tasks)
@@ -30,6 +32,8 @@ public class TaskQueue
             Monitor.Pulse(_tasks);
         }
     }
+
+    // Fetch work from queue
     private Action? DequeueTask()
     {
         lock (_tasks)
@@ -65,6 +69,7 @@ public class TaskQueue
         }
     }
 
+    // Wait for all threads and dispose token
     public void Close()
     {
         Cts.Cancel();

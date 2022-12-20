@@ -1,13 +1,11 @@
 ﻿using Directory_Scanner.Model.Tree;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Directory_Scanner.VVM.Model;
 
+// Obtain View-Model representation of TreeNode from model
 public class VMTreeNode
 {
     public string Name { get; set; }
@@ -23,6 +21,7 @@ public class VMTreeNode
         Percentage = Math.Truncate(node.Percentage * 100) / 100;
     }
 
+    // Copy TreeNode nested nodes to the Veiw-Model tree node
     public static VMTreeNode ConvertChildren(VMTreeNode nodeVM, TreeNode node)
     {
         if (node.Children is not null)

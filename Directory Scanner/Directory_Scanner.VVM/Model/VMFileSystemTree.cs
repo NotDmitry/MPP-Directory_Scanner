@@ -2,6 +2,7 @@
 
 namespace Directory_Scanner.VVM.Model;
 
+// Obtain View-Model representation of FileSystemTree from model
 public class VMFileSystemTree
 {
     public static string icoFolderPath = System.IO.Path.GetFullPath(@"..\..\..\Icons\FolderIcon.png");
