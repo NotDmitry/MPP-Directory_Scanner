@@ -7,7 +7,7 @@ namespace Directory_Scanner.Model;
 public class DirectoryScanner
 {
 	private int maxThreads;
-	private readonly int _defaultThreads = 6;
+	public readonly int _defaultThreads = 6;
 	
     public int MaxThreads 
 	{
