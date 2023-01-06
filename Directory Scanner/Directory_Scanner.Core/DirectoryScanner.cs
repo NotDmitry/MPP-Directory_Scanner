@@ -27,8 +27,6 @@ public class DirectoryScanner
 	// Already scanned files
 	public int currentFiles = 0;
 
-	private object locker = new();
-
 	private TaskQueue? _taskQueue;
 	private TreeNode? _root;
 
@@ -49,8 +47,7 @@ public class DirectoryScanner
             {
                 Percentage = 100
             };
-			lock(locker)
-				maxFiles = GetTotalCount(dir);
+			maxFiles = GetTotalCount(dir);
             _taskQueue = new TaskQueue(maxThreads);
 			_taskQueue.EnqueueTask(() => ScanFullDirectory(_root));
 		}
@@ -74,8 +71,10 @@ public class DirectoryScanner
 				// Scan files
 				FileInfo[] files = dir.GetFiles();
 				foreach (FileInfo file in files) 
-				{ 
-					if (file.LinkTarget is null && !_taskQueue.Cts.Token.IsCancellationRequested)
+				{
+					if (_taskQueue.Cts.Token.IsCancellationRequested)
+						return;
+					if (file.LinkTarget is null)
 					{
                         var insertionNode = new TreeNode(file.Name, file.FullName, false)
                         {
@@ -91,7 +90,9 @@ public class DirectoryScanner
                 DirectoryInfo[] directories = dir.GetDirectories();
                 foreach (DirectoryInfo directory in directories)
                 {
-                    if (directory.LinkTarget is null && directory.Exists && !_taskQueue.Cts.Token.IsCancellationRequested)
+                    if (_taskQueue.Cts.Token.IsCancellationRequested)
+                        return;
+                    if (directory.LinkTarget is null)
                     {
                         var insertionNode = new TreeNode(directory.Name, directory.FullName, true);
                         parent.Children?.Add(insertionNode);
@@ -111,12 +112,12 @@ public class DirectoryScanner
 	// Wait for worker threads to stop or cancellation request
     public void WaitForActiveWorkers()
     {
-        while (_taskQueue.WaitingCount != maxThreads && condition == 0)
+        while (Interlocked.CompareExchange(ref condition, 1, 1) == 0 && _taskQueue.WaitingCount != maxThreads)
         {
         }
 		_taskQueue.Close();
     }
-
+	
 	// Change condition to cancel scanning
 	public void SuspendWorkers()
 	{
